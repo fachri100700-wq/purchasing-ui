@@ -1,6 +1,6 @@
 import React from "react";
 import { Boxes, LayoutDashboard, FileText, Receipt, LogOut } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom"; // 1. Ubah Link jadi NavLink
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -10,6 +10,13 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children, userRoleLabel, userEmail }: DashboardLayoutProps) {
   const navigate = useNavigate();
+
+  const navLinkStyle = ({ isActive }: { isActive: boolean }) =>
+    `rounded-xl px-4 py-3 text-sm font-medium flex items-center gap-3 transition-all ${
+      isActive
+        ? "bg-slate-900 text-white shadow-md"
+        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+    }`;
 
   return (
     <div className="min-h-screen p-4 lg:p-6 flex gap-6 w-full">
@@ -27,18 +34,21 @@ export default function DashboardLayout({ children, userRoleLabel, userEmail }: 
           </div>
 
           <nav className="space-y-2">
-            <a href="#" className="bg-slate-900 text-white rounded-xl px-4 py-3 text-sm font-medium flex items-center gap-3 shadow-md">
+            {/* 3. Pake NavLink dengan dynamic className */}
+            <NavLink to="/dashboard" className={navLinkStyle}>
               <LayoutDashboard className="w-4 h-4" />
               Dashboard
-            </a>
-            <a href="#" className="text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded-xl px-4 py-3 text-sm font-medium flex items-center gap-3 transition-all">
+            </NavLink>
+
+            <NavLink to="/spp" className={navLinkStyle}>
               <FileText className="w-4 h-4" />
               SPP
-            </a>
-            <a href="#" className="text-slate-600 hover:bg-slate-100 hover:text-slate-900 rounded-xl px-4 py-3 text-sm font-medium flex items-center gap-3 transition-all">
+            </NavLink>
+
+            <NavLink to="/resi" className={navLinkStyle}>
               <Receipt className="w-4 h-4" />
               Resi
-            </a>
+            </NavLink>
           </nav>
         </div>
 
