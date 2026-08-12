@@ -1,6 +1,7 @@
 import React from "react";
 import { Boxes, LayoutDashboard, FileText, Receipt, LogOut } from "lucide-react";
 import { useNavigate, NavLink } from "react-router-dom"; // 1. Ubah Link jadi NavLink
+import { backgroundContainer } from "../ui/styles";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -21,7 +22,7 @@ export default function DashboardLayout({ children, userRoleLabel, userEmail }: 
   return (
     <div className="min-h-screen p-4 lg:p-6 flex gap-6 w-full">
       {/* Sidebar */}
-      <aside className="w-64 bg-white/90 backdrop-blur-md rounded-2xl p-4 flex flex-col justify-between shadow-lg hidden md:flex">
+      <aside className={`w-64 flex flex-col justify-between hidden md:flex ${backgroundContainer}`}>
         <div>
           <div className="flex items-center gap-3 mb-8 px-2 mt-2">
             <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center shadow-md">

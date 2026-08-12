@@ -2,6 +2,8 @@ import React from "react";
 import MetricCard from "../../../components/ui/MetricCard";
 import SppListItem from "../../../components/ui/SppListItem";
 import { FileText, Clock, CheckCircle, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { backgroundContainer } from "../../../components/ui/styles";
 
 export default function UserDashboard() {
   return (
@@ -13,9 +15,9 @@ export default function UserDashboard() {
             <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Dashboard Pemohon</h1>
             <p className="text-sm text-slate-600">Pantau status pengajuan SPP Anda</p>
           </div>
-          <button className="bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm py-2.5 px-5 rounded-xl transition-all shadow-md active:scale-[0.99]">
+          <Link to="/spp/create" className="bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm py-2.5 px-5 rounded-xl transition-all shadow-md active:scale-[0.99]">
             Ajukan SPP Baru
-          </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -27,7 +29,7 @@ export default function UserDashboard() {
       </div>
 
       {/* List Section */}
-      <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-white/50 flex-1">
+      <div className={backgroundContainer}>
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-base font-bold text-slate-900">Pengajuan Terbaru Anda</h2>
           <a href="#" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1">

@@ -8,6 +8,7 @@ import Root from './components/layout/RootLayout';
 import LoginPage from './app/auth/LoginPage';
 import DashboardPage from './app/dashboard/DashboardPage';
 import SppListPage from './app/spp/SppListPage';
+import SppCreatePage from './app/spp/SppCreatePage';
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,8 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <LoginPage /> },
       {path: '/dashboard', element: <DashboardPage />},
-      {path: '/spp', element: <SppListPage />}
+      {path: '/spp', element: <SppListPage />},
+      {path: '/spp/create', element: <SppCreatePage />}
     ],
   },
 ]);

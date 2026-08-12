@@ -1,0 +1,1 @@
+export const backgroundContainer = "border border-white/60 bg-white/70 shadow-xl shadow-sky-900/10 backdrop-blur-xl rounded-2xl p-5"
