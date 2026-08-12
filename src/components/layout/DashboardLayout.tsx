@@ -58,7 +58,7 @@ export default function DashboardLayout({ children, userRoleLabel, userEmail }: 
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col gap-6 overflow-y-auto">
+      <main className="flex-1 flex flex-col gap-6 overflow-y-auto pb-1 px-1">
         {children}
       </main>
     </div>

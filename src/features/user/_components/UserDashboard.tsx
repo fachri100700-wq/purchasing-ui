@@ -30,6 +30,9 @@ export default function UserDashboard() {
       <div className="bg-white/90 backdrop-blur-md rounded-3xl p-6 shadow-sm border border-white/50 flex-1">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-base font-bold text-slate-900">Pengajuan Terbaru Anda</h2>
+          <a href="#" className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1">
+            Lihat semua <ArrowRight className="w-3 h-3" />
+          </a>
         </div>
         
         <div className="space-y-3">
