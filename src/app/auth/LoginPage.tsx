@@ -1,17 +1,11 @@
-import {
-  Boxes,
-  LogIn,
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-} from "lucide-react";
-import { useState } from "react";
+import { Boxes, Mail, Lock } from "lucide-react";;
+import { useLogin } from "../../features/auth/hooks/useLogin";
+import Input from "../../components/ui/Input";
+import PasswordInput from "../../components/ui/InputPassword";
 
 export default function LoginPageUI() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
+  const { register, handleSubmit, errors, isSubmitting } = useLogin();
 
   return (
     <div>
@@ -24,46 +18,34 @@ export default function LoginPageUI() {
           Sistem Permintaan Pengadaan
         </h1>
         <p className="mt-2 text-xs text-slate-500">
-          Ajukan SPP, setujui PO, dan pantau penerimaan <br /> barang dalam satu alur.
+          Ajukan SPP, setujui PO, dan pantau penerimaan <br /> barang dalam satu
+          alur.
         </p>
 
         <form
           className="mt-6 space-y-3 text-left"
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleSubmit}
+          noValidate
         >
-
-          <div className="flex items-center gap-2 rounded-xl bg-slate-100/70 px-3 py-2.5 focus-within:ring-2 focus-within:ring-sky-400">
-            <Mail className="size-4 text-slate-500" />
-            <input
+          <div className="flex items-center ">
+            <Input
               type="email"
               placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              icon={Mail}
+              {...register("email")}
               className="w-full bg-transparent text-sm outline-none placeholder:text-slate-500"
+              isLoading={isSubmitting}
+              error={errors.email?.message}
             />
           </div>
 
-          <div className="flex items-center gap-2 rounded-xl bg-slate-100/70 px-3 py-2.5 focus-within:ring-2 focus-within:ring-sky-400">
-            <Lock className="size-4 text-slate-500" />
-            <input
-              type={showPassword ? "text" : "password"}
+          <div className="flex items-center">
+            <PasswordInput
               placeholder="Kata sandi"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-transparent text-sm outline-none placeholder:text-slate-500"
+              icon={Lock}
+              {...register("password")}
+              error={errors.password?.message}
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              aria-label="Tampilkan kata sandi"
-              className="focus:outline-none"
-            >
-              {showPassword ? (
-                <Eye className="size-4 text-slate-500 hover:text-slate-700" />
-              ) : (
-                <EyeOff className="size-4 text-slate-500 hover:text-slate-700" />
-              )}
-            </button>
           </div>
 
           <button
@@ -76,7 +58,8 @@ export default function LoginPageUI() {
 
         {/* Footer info */}
         <p className="mt-6 text-xs text-slate-500">
-          Hak akses dan tampilan disesuaikan secara otomatis berdasarkan peran akun Anda.
+          Hak akses dan tampilan disesuaikan secara otomatis berdasarkan peran
+          akun Anda.
         </p>
       </div>
     </div>

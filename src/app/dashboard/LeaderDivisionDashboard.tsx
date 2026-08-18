@@ -1,7 +1,7 @@
-import React from "react";
-import MetricCard from "../../../components/ui/MetricCard";
-import SppListItem from "../../../components/ui/SppListItem";
+
 import { Users, AlertCircle, CheckCircle, ArrowRight } from "lucide-react";
+import MetricCard from "../../components/ui/MetricCard";
+import SppListItem from "../../components/ui/SppListItem";
 
 export default function LeaderDivisionDashboard() {
   return (

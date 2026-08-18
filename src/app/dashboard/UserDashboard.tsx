@@ -1,9 +1,8 @@
-import React from "react";
-import MetricCard from "../../../components/ui/MetricCard";
-import SppListItem from "../../../components/ui/SppListItem";
+import MetricCard from "../../components/ui/MetricCard";
+import SppListItem from "../../components/ui/SppListItem";
 import { FileText, Clock, CheckCircle, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { backgroundContainer } from "../../../components/ui/styles";
+import { backgroundContainer } from "../../components/ui/styles";
 
 export default function UserDashboard() {
   return (
