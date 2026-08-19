@@ -1,6 +1,6 @@
 import { Package, Inbox, CheckCircle, ArrowRight } from "lucide-react";
-import MetricCard from "../../components/ui/MetricCard";
-import SppListItem from "../../components/ui/SppListItem";
+import MetricCard from "../../../components/ui/MetricCard";
+import SppListItem from "../../../components/ui/SppListItem";
 
 export default function GudangDashboard() {
   return (

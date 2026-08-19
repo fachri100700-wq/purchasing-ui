@@ -4,15 +4,9 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./components/layout/RootLayout";
 import LoginPage from "./app/auth/LoginPage";
-import SppListPage from "./app/spp/SppListPage";
+import DashboardPage from "./app/dashboard/Dashboard";
 import SppCreatePage from "./app/spp/SppCreatePage";
-import UserDashboard from "./app/dashboard/UserDashboard";
-import LeaderPurchasingDashboard from "./app/dashboard/LeaderPurchasingDashboard";
-import LeaderDivisionDashboard from "./app/dashboard/LeaderDivisionDashboard";
-import LeaderAuditDashboard from "./app/dashboard/LeaderAuditDashboard";
-import GudangDashboard from "./app/dashboard/GudangDashboard";
-import DireksiDashboard from "./app/dashboard/DireksiDashboard";
-import AuditDashboard from "./app/dashboard/AuditDashboard";
+import SppListPage from "./app/spp/SppListPage";
 
 const router = createBrowserRouter([
   {
@@ -20,18 +14,9 @@ const router = createBrowserRouter([
     element: <Root />,
     children: [
       { index: true, element: <LoginPage /> },
-      { path: "/user-dashboard", element: <UserDashboard /> },
-      {
-        path: "/ka-purchasing-dashboard",
-        element: <LeaderPurchasingDashboard />,
-      },
-      { path: "/ka-divisi-dashboard", element: <LeaderDivisionDashboard /> },
-      { path: "/ka-auditor-dashboard", element: <LeaderAuditDashboard /> },
-      { path: "/gudang-dashboard", element: <GudangDashboard /> },
-      { path: "/direksi-dashboard", element: <DireksiDashboard /> },
-      { path: "/audit-dashboard", element: <AuditDashboard /> },
-      { path: "/spp", element: <SppListPage /> },
+      { path: "/dashboard", element: <DashboardPage /> },
       { path: "/spp/create", element: <SppCreatePage /> },
+      { path: "/spp/list", element: <SppListPage /> },
     ],
   },
 ]);

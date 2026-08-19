@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import SppListItem from "../../components/ui/SppListItem";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
@@ -55,7 +55,7 @@ const generateMockData = (): SppData[] => {
 };
 
 const mockSppList = generateMockData();
-const ITEMS_PER_PAGE = 7;
+const ITEMS_PER_PAGE = 10;
 
 export default function SppListPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -77,13 +77,10 @@ export default function SppListPage() {
     return filteredData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   }, [filteredData, currentPage]);
 
-  // Reset page ketika search query berubah
-  React.useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery]);
+ 
 
   return (
-    <DashboardLayout userRoleLabel="User Access" userEmail="user@pengadaan.co.id">
+    <DashboardLayout>
       
       {/* Header */}
       <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">

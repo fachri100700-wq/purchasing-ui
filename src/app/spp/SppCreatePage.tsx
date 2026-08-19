@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import Input from "../../components/ui/Input";
 import Select from "../../components/ui/Select";
-import Textarea from "../../components/ui/Textarea";
-import { FileText, Building2, PackageSearch, Banknote, FileType, CheckCircle, Plus, Trash2, Info } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Plus, Trash2 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { backgroundContainer } from "../../components/ui/styles";
 
 interface Row {
@@ -16,9 +15,7 @@ interface Row {
 }
 
 export default function SppCreatePage() {
-  const navigate = useNavigate();
 
-  const [type, setType] = useState<"routine" | "necessary">("routine");
   const [rows, setRows] = useState<Row[]>([{ name: "", brand: "", size: "", qty: 1, unit: "pcs" }]);
 
   const update = (i: number, patch: Partial<Row>) =>
@@ -32,25 +29,9 @@ export default function SppCreatePage() {
     description: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Proses form submit (mock)
-    console.log("Submit SPP Data:", formData);
-
-    // Kembali ke dashboard atau list SPP setelah submit
-    navigate("/spp");
-  };
-
-  const inputCls =
-    "w-full rounded-xl border border-slate-200 bg-white/80 px-3 py-2 text-sm outline-none transition-colors placeholder:text-slate-500 focus:border-ring"
-
-  const THRESHOLD = 900_000
-
-  const formatIDR = (v: number) =>
-    new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(v);
 
   return (
-    <DashboardLayout userRoleLabel="User Access" userEmail="user@pengadaan.co.id">
+    <DashboardLayout>
 
       {/* Header */}
       <div className="mb-6">

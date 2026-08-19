@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { loginSchema, type LoginDTO } from "../schema/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginApi } from "../api/auth.api";
-import { userRoles } from "../../../../../purchasing-service/src/common/enums/roles.enum";
 import { toast } from "sonner";
 
 export function useLogin() {
@@ -36,21 +35,7 @@ export function useLogin() {
             division: res.user.division,
         })
 
-        if(res.user.role === userRoles.USER) {
-            navigate("/user-dashboard");
-        } else if(res.user.role === userRoles.LEADER_PURCHASING) {
-            navigate("/ka-purchasing-dashboard");
-        } else if(res.user.role === userRoles.LEADER_DIVISION) {
-            navigate("/ka-divisi-dashboard");
-        } else if(res.user.role === userRoles.LEADER_AUDIT) {
-            navigate("/ka-auditor-dashboard");
-        } else if(res.user.role === userRoles.GUDANG) {
-            navigate("/gudang-dashboard");
-        } else if(res.user.role === userRoles.DIREKSI) {
-            navigate("/direksi-dashboard");
-        } else if(res.user.role === userRoles.AUDIT) {
-            navigate("/audit-dashboard");
-        }
+        navigate("/dashboard");
 
         return res
         

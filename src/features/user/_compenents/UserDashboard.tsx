@@ -1,8 +1,8 @@
-import MetricCard from "../../components/ui/MetricCard";
-import SppListItem from "../../components/ui/SppListItem";
+import MetricCard from "../../../components/ui/MetricCard";
+import SppListItem from "../../../components/ui/SppListItem";
 import { FileText, Clock, CheckCircle, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { backgroundContainer } from "../../components/ui/styles";
+import { backgroundContainer } from "../../../components/ui/styles";
 
 export default function UserDashboard() {
   return (
@@ -35,7 +35,7 @@ export default function UserDashboard() {
             Lihat semua <ArrowRight className="w-3 h-3" />
           </a>
         </div>
-        
+
         <div className="space-y-3">
           <SppListItem 
             sppNo="SPP-2026-0141"
