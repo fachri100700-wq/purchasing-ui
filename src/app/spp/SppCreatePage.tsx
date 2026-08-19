@@ -1,41 +1,29 @@
-import { useState } from "react";
+import { useFieldArray, Controller } from "react-hook-form";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import Input from "../../components/ui/Input";
 import Select from "../../components/ui/Select";
 import { Plus, Trash2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { backgroundContainer } from "../../components/ui/styles";
-
-interface Row {
-  name: string;
-  brand: string;
-  size: string;
-  qty: number;
-  unit: string;
-}
+import { useCreateSpp } from "../../features/user/hooks/useCreateSpp";
 
 export default function SppCreatePage() {
-  const [rows, setRows] = useState<Row[]>([
-    { name: "", brand: "", size: "", qty: 1, unit: "pcs" },
-  ]);
+  const navigate = useNavigate();
+  const { register, handleSubmit, errors, isSubmitting, control } =
+    useCreateSpp({
+      onSuccess: () => navigate("/spp"),
+    });
 
-  const update = (i: number, patch: Partial<Row>) =>
-    setRows((prev) =>
-      prev.map((r, idx) => (idx === i ? { ...r, ...patch } : r)),
-    );
-
-  const [formData, setFormData] = useState({
-  purchaseType: "",
-  status: "",
-  sourcingType: "",
-  budgetComplianceStatus: "",
-});
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "sppDetails",
+  });
 
   return (
     <DashboardLayout>
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+      <div className="">
+        <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
           Permintaan Pembelian
         </h1>
         <p className="text-sm text-slate-600">
@@ -46,7 +34,10 @@ export default function SppCreatePage() {
 
       {/* Form Container */}
       <div className="">
-        <form className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+        <form
+          className="grid gap-6 lg:grid-cols-[1.6fr_1fr]"
+          onSubmit={handleSubmit}
+        >
           <div className="space-y-6">
             <section className={backgroundContainer}>
               <h2 className="text-base font-semibold">Informasi pengajuan</h2>
@@ -54,92 +45,102 @@ export default function SppCreatePage() {
                 <Input
                   label="Perihal SPP"
                   placeholder="Contoh: Pengadaan ATK Bulanan Divisi Operasional"
+                  error={errors.title?.message}
+                  {...register("title")}
                 />
-                <Select
-                  label="Tipe Pembelian"
-                  value={formData.purchaseType}
-                  onChange={(value) =>
-                    setFormData({
-                      ...formData,
-                      purchaseType: value,
-                    })
-                  }
-                  options={[
-                    { label: "Rutin", value: "rutin" },
-                    { label: "Khusus", value: "khusus" },
-                  ]}
-                />
-
-                <Select
-                  label="Status"
-                  value={formData.status}
-                  onChange={(value) =>
-                    setFormData({
-                      ...formData,
-                      status: value,
-                    })
-                  }
-                  options={[
-                    { label: "Biasa", value: "standard" },
-                    { label: "Mendesak", value: "urgent" },
-                  ]}
-                 
+                <Controller
+                  name="purchaseType"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      label="Tipe Pembelian"
+                      value={field.value}
+                      onChange={field.onChange}
+                      error={errors.purchaseType?.message}
+                      options={[
+                        { label: "Rutin", value: "routine" },
+                        { label: "Kebutuhan", value: "necessary" },
+                      ]}
+                    />
+                  )}
                 />
 
-                <Select
-                  label="Pembelian"
-                  value={formData.sourcingType}
-                  onChange={(value) =>
-                    setFormData({
-                      ...formData,
-                      sourcingType: value,
-                    })
-                  }
-                  options={[
-                    { label: "Lokal", value: "local" },
-                    { label: "Import", value: "import" },
-                  ]}
-               
+                <Controller
+                  name="priority"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      label="Prioritas"
+                      value={field.value}
+                      onChange={field.onChange}
+                      error={errors.priority?.message}
+                      options={[
+                        { label: "Biasa", value: "standard" },
+                        { label: "Mendesak", value: "urgent" },
+                      ]}
+                    />
+                  )}
                 />
 
-                <Select
-                  label="Kesesuaian Anggaran"
-                  value={formData.budgetComplianceStatus}
-                  onChange={(value) =>
-                    setFormData({
-                      ...formData,
-                      budgetComplianceStatus: value,
-                    })
-                  }
-                  options={[
-                    {
-                      label: "Tidak Termasuk List Budget",
-                      value: "unbudgeted",
-                    },
-                    {
-                      label: "Pengajuan Melebihi Budget",
-                      value: "budget_exceeded",
-                    },
-                    {
-                      label: "Sesuai Budget",
-                      value: "within_budget",
-                    },
-                  ]}
-                 
+                <Controller
+                  name="sourcingType"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      label="Pembelian"
+                      value={field.value}
+                      onChange={field.onChange}
+                      error={errors.sourcingType?.message}
+                      options={[
+                        { label: "Lokal", value: "local" },
+                        { label: "Import", value: "import" },
+                      ]}
+                    />
+                  )}
+                />
+
+                <Controller
+                  name="budgetCompliance"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      label="Kesesuaian Anggaran"
+                      value={field.value}
+                      onChange={field.onChange}
+                      error={errors.budgetCompliance?.message}
+                      options={[
+                        {
+                          label: "Tidak Termasuk List Budget",
+                          value: "unbudgeted",
+                        },
+                        {
+                          label: "Pengajuan Melebihi Budget",
+                          value: "budget_exceeded",
+                        },
+                        {
+                          label: "Sesuai Budget",
+                          value: "within_budget",
+                        },
+                      ]}
+                    />
+                  )}
                 />
               </div>
             </section>
 
-            <section className="border border-white/60 bg-white/70 shadow-xl shadow-sky-900/10 backdrop-blur-xl rounded-2xl p-5">
+            <section className={backgroundContainer}>
               <div className="flex items-center justify-between">
                 <h2 className="text-base font-semibold">Rincian barang</h2>
                 <button
                   type="button"
                   onClick={() =>
-                    setRows((p) => [
-                      ...p,
-                      { name: "", brand: "", size: "", qty: 1, unit: "pcs" },
-                    ])
+                    append({
+                      productName: "",
+                      brandOrType: "",
+                      size: "",
+                      quantity: 1,
+                      intendedPurpose: "",
+                    })
                   }
                   className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs hover:bg-sky-100"
                 >
@@ -148,38 +149,63 @@ export default function SppCreatePage() {
               </div>
 
               <div className="mt-4 space-y-3">
-                {rows.map((r, i) => (
+                {fields.map((field, i) => (
                   <div
-                    key={i}
-                    className="grid gap-2 sm:grid-cols-[1fr_80px_90px_130px_36px] "
+                    key={field.id}
+                    className={backgroundContainer}
                   >
-                    <Input label="Nama barang" placeholder="Contoh: Laptop" />
-                    <Input label="Merek" placeholder="Asus" />
-                    <Input label="Ukuran" placeholder="14 Inch" />
-                    <Input
-                      label="Jumlah"
-                      type="number"
-                      min={1}
-                      value={r.qty}
-                      onChange={(e) =>
-                        update(i, { qty: Number(e.target.value) })
-                      }
-                    />
-                    <div className="flex flex-col gap-1.5">
-                      <span className="text-[13px] opacity-0 select-none">
-                        Hapus
-                      </span>{" "}
-                      {/* Invisible spacer */}
-                      <button
-                        type="button"
-                        aria-label="Hapus item"
-                        onClick={() =>
-                          setRows((p) => p.filter((_, idx) => idx !== i))
-                        }
-                        className="flex h-[42px] items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 transition-colors"
-                      >
-                        <Trash2 className="size-4" />
-                      </button>
+                    <div className="grid gap-3 lg:grid-cols-[1.4fr_1fr_1fr_120px_auto]">
+                      <Input
+                        label="Nama barang"
+                        placeholder="Contoh: Laptop"
+                        error={errors.sppDetails?.[i]?.productName?.message}
+                        {...register(`sppDetails.${i}.productName`)}
+                      />
+
+                      <Input
+                        label="Merek"
+                        placeholder="Asus"
+                        error={errors.sppDetails?.[i]?.brandOrType?.message}
+                        {...register(`sppDetails.${i}.brandOrType`)}
+                      />
+
+                      <Input
+                        label="Ukuran"
+                        placeholder="14 Inch"
+                        error={errors.sppDetails?.[i]?.size?.message}
+                        {...register(`sppDetails.${i}.size`)}
+                      />
+
+                      <Input
+                        label="Jumlah"
+                        type="number"
+                        min={1}
+                        error={errors.sppDetails?.[i]?.quantity?.message}
+                        {...register(`sppDetails.${i}.quantity`, {
+                          valueAsNumber: true,
+                        })}
+                      />
+
+                      <div className="flex items-end">
+                        <button
+                          type="button"
+                          aria-label="Hapus item"
+                          onClick={() => remove(i)}
+                          disabled={fields.length === 1}
+                          className="flex h-[42px] w-[42px] items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition-colors hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          <Trash2 className="size-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="mt-3">
+                      <Input
+                        label="Tujuan Penggunaan"
+                        placeholder="Contoh: Digunakan untuk operasional divisi"
+                        error={errors.sppDetails?.[i]?.intendedPurpose?.message}
+                        {...register(`sppDetails.${i}.intendedPurpose`)}
+                      />
                     </div>
                   </div>
                 ))}
@@ -189,11 +215,17 @@ export default function SppCreatePage() {
 
           <aside className="space-y-4">
             <div className="border border-white/60 bg-white/70 shadow-xl shadow-sky-900/10 backdrop-blur-xl rounded-2xl p-5">
+              {errors.root?.message && (
+                <p className="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs font-medium text-rose-600">
+                  {errors.root.message}
+                </p>
+              )}
               <button
                 type="submit"
-                className="mt-4 w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:opacity-90"
+                disabled={isSubmitting}
+                className="mt-4 w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Kirim ke Kepala Bagian
+                {isSubmitting ? "Mengirim..." : "Kirim ke Kepala Bagian"}
               </button>
               <Link
                 to="/spp"

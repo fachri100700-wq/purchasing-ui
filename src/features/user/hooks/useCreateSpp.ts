@@ -1,18 +1,22 @@
 import { useForm } from "react-hook-form";
-import { createSppSchema, type CreateSppDTO } from "../schema/create-spp.schema";
+import { createSppSchema, type CreateSppFormValues } from "../schema/create-spp.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateSppApi } from "../api/spp.api";
 import { toast } from "sonner";
 
-export function useCreateSpp() {
-  const form = useForm<CreateSppDTO>({
+interface UseCreateSppOptions {
+  onSuccess?: () => void;
+}
+
+export function useCreateSpp(options?: UseCreateSppOptions) {
+  const form = useForm<CreateSppFormValues>({
     resolver: zodResolver(createSppSchema),
     defaultValues: {
       title: "",
-      purchaseType: "routine",
-      priority: "standard",
-      sourcingType: "local",
-      budgetCompliance: "within_budget",
+      purchaseType: "",
+      priority: "",
+      sourcingType: "",
+      budgetCompliance: "",
       sppDetails: [
         {
           productName: "",
@@ -25,11 +29,16 @@ export function useCreateSpp() {
     },
   });
 
-  const onSubmit = async (payload: CreateSppDTO) => {
+  const onSubmit = async (payload: CreateSppFormValues) => {
+    // Parse eksplisit: hasil parse dijamin CreateSppDTO (union literal tervalidasi)
+    const parsed = createSppSchema.parse(payload);
+
     try {
-      const res = await CreateSppApi(payload);
+      const res = await CreateSppApi(parsed);
 
       toast.success("SPP berhasil dibuat");
+
+      options?.onSuccess?.();
 
       return res;
     } catch (error) {
@@ -49,5 +58,6 @@ export function useCreateSpp() {
     errors: form.formState.errors,
     isSubmitting: form.formState.isSubmitting,
     reset: form.reset,
+    control: form.control,
   };
 }

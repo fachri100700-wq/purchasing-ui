@@ -29,9 +29,9 @@ export default function UserDashboard() {
     <>
       {/* Header & Metrics */}
       <div>
-        <div className="flex justify-between items-end mb-6">
+        <div className="flex justify-between items-end mb-5">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Dashboard Pemohon</h1>
+            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Dashboard Pemohon</h1>
             <p className="text-sm text-slate-600">Pantau status pengajuan SPP Anda</p>
           </div>
           <Link to="/spp/create" className="bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm py-2.5 px-5 rounded-xl transition-all shadow-md active:scale-[0.99]">

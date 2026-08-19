@@ -51,9 +51,9 @@ export default function SppListPage() {
   return (
     <DashboardLayout>
       {/* Header */}
-      <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
+      <div className=" flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Daftar Lengkap SPP</h1>
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Daftar Lengkap SPP</h1>
           <p className="text-sm text-slate-600">Seluruh pengajuan SPP beserta status terkininya.</p>
         </div>
 

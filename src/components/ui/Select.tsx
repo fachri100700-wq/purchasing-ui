@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { type LucideIcon, ChevronDown, Check } from "lucide-react";
 
 interface Option {
@@ -32,11 +33,31 @@ export default function Select({
   className = "",
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const selectRef = useRef<HTMLDivElement>(null);
+  const [coords, setCoords] = useState({ top: 0, left: 0, width: 0 });
 
-  const selectedOption = options.find(
-    (option) => option.value === value,
-  );
+  const selectRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const selectedOption = options.find((option) => option.value === value);
+
+  // Update posisi dropdown secara presisi relatif terhadap viewport/window
+  const updatePosition = () => {
+    if (buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setCoords({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX,
+        width: rect.width,
+      });
+    }
+  };
+
+  const handleToggle = () => {
+    if (!isOpen) {
+      updatePosition();
+    }
+    setIsOpen((prev) => !prev);
+  };
 
   const handleSelect = (selectedValue: string) => {
     onChange?.(selectedValue);
@@ -49,19 +70,31 @@ export default function Select({
         selectRef.current &&
         !selectRef.current.contains(event.target as Node)
       ) {
+        // Cek juga klik di luar elemen portal dropdown
+        const portalElement = document.getElementById("select-portal-dropdown");
+        if (portalElement && portalElement.contains(event.target as Node)) {
+          return;
+        }
         setIsOpen(false);
       }
     };
 
+    const handleResizeOrScroll = () => {
+      if (isOpen) {
+        updatePosition();
+      }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("resize", handleResizeOrScroll);
+    window.addEventListener("scroll", handleResizeOrScroll, true);
 
     return () => {
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutside,
-      );
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("resize", handleResizeOrScroll);
+      window.removeEventListener("scroll", handleResizeOrScroll, true);
     };
-  }, []);
+  }, [isOpen]);
 
   return (
     <div
@@ -75,9 +108,10 @@ export default function Select({
       )}
 
       <button
+        ref={buttonRef}
         type="button"
         disabled={disabled}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={handleToggle}
         className={`
           flex w-full items-center gap-2 rounded-xl border bg-white
           px-3 py-2.5 text-left text-sm transition-all
@@ -99,9 +133,7 @@ export default function Select({
 
         <span
           className={`flex-1 truncate ${
-            selectedOption
-              ? "text-slate-900"
-              : "text-slate-400"
+            selectedOption ? "text-slate-900" : "text-slate-400"
           }`}
         >
           {selectedOption?.label ?? placeholder}
@@ -114,42 +146,52 @@ export default function Select({
         />
       </button>
 
-      {isOpen && !disabled && (
-        <div
-          className="
-            absolute top-full z-50 mt-2 w-full overflow-hidden
-            rounded-xl border border-slate-200 bg-white
-            py-1 shadow-lg shadow-slate-900/10
-          "
-        >
-          {options.map((option) => {
-            const isSelected = option.value === value;
+      {/* Render Dropdown via React Portal ke document.body */}
+      {isOpen &&
+        !disabled &&
+        createPortal(
+          <div
+            id="select-portal-dropdown"
+            style={{
+              position: "absolute",
+              top: `${coords.top + 8}px`, // Gap 8px (mt-2)
+              left: `${coords.left}px`,
+              width: `${coords.width}px`,
+            }}
+            className="
+              z-[9999] overflow-hidden rounded-xl border border-slate-200
+              bg-white py-1 shadow-lg shadow-slate-900/10
+            "
+          >
+            {options.map((option) => {
+              const isSelected = option.value === value;
 
-            return (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => handleSelect(option.value)}
-                className={`
-                  flex w-full items-center justify-between px-3 py-2.5
-                  text-left text-sm transition-colors
-                  ${
-                    isSelected
-                      ? "bg-sky-50 text-sky-700"
-                      : "text-slate-700 hover:bg-slate-50"
-                  }
-                `}
-              >
-                {option.label}
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => handleSelect(option.value)}
+                  className={`
+                    flex w-full items-center justify-between px-3 py-2.5
+                    text-left text-sm transition-colors
+                    ${
+                      isSelected
+                        ? "bg-sky-50 text-sky-700"
+                        : "text-slate-700 hover:bg-slate-50"
+                    }
+                  `}
+                >
+                  {option.label}
 
-                {isSelected && (
-                  <Check className="size-4 text-sky-600" />
-                )}
-              </button>
-            );
-          })}
-        </div>
-      )}
+                  {isSelected && (
+                    <Check className="size-4 text-sky-600" />
+                  )}
+                </button>
+              );
+            })}
+          </div>,
+          document.body
+        )}
 
       {error && (
         <span className="text-xs font-medium text-rose-500">

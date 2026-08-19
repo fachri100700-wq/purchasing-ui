@@ -3,55 +3,49 @@ import z from "zod";
 // ===================== Create SPP Schema =====================
 
 export const createSppDetailSchema = z.object({
-  productName: z
-    .string()
-    .trim()
-    .nonempty("Nama produk wajib diisi"),
-  brandOrType: z
-    .string()
-    .trim()
-    .nonempty("Brand atau tipe wajib diisi"),
-  size: z
-    .string()
-    .trim()
-    .nonempty("Ukuran wajib diisi"),
-  quantity: z
-    .number()
-    .min(1, "Quantity minimal 1"),
-  intendedPurpose: z
-    .string()
-    .trim()
-    .nonempty("Intended purpose wajib diisi"),
+  productName: z.string().trim().min(1, "Nama produk wajib diisi"),
+  brandOrType: z.string().trim().min(1, "Brand atau tipe wajib diisi"),
+  size: z.string().trim().min(1, "Ukuran wajib diisi"),
+  quantity: z.number().min(1, "Quantity minimal 1"),
+  intendedPurpose: z.string().trim().min(1, "Intended purpose wajib diisi"),
 });
 
 export const createSppSchema = z.object({
-  title: z
-    .string()
-    .trim()
-    .nonempty("Title wajib diisi"),
+  title: z.string().trim().min(1, "Title wajib diisi"),
   purchaseType: z
-    .enum(["routine", "necessary"], {
-      message: "Purchase type tidak valid",
-    }),
+    .string()
+    .refine(
+      (val) => val === "routine" || val === "necessary",
+      "Tipe pembelian wajib diisi",
+    ),
   priority: z
-    .enum(["standard", "urgent"], {
-      message: "Priority tidak valid",
-    }),
+    .string()
+    .refine(
+      (val) => val === "standard" || val === "urgent",
+      "Prioritas wajib diisi",
+    ),
   sourcingType: z
-    .enum(["local", "import"], {
-      message: "Sourcing type tidak valid",
-    }),
+    .string()
+    .refine(
+      (val) => val === "local" || val === "import",
+      "Pembelian wajib diisi",
+    ),
   budgetCompliance: z
-    .enum(["within_budget", "budget_exceeded", "unbudgeted"], {
-      message: "Budget compliance tidak valid",
-    }),
-  sppDetails: z
-    .array(createSppDetailSchema)
-    .nonempty("Detail SPP wajib diisi"),
+    .string()
+    .refine(
+      (val) =>
+        val === "within_budget" ||
+        val === "budget_exceeded" ||
+        val === "unbudgeted",
+      "Kesesuaian anggaran wajib diisi",
+    ),
+  sppDetails: z.array(createSppDetailSchema).min(1, "Detail SPP wajib diisi"),
 });
 
-export type CreateSppDTO = z.infer<typeof createSppSchema>;
-export type CreateSppDetailDTO = z.infer<typeof createSppDetailSchema>;
+// Output setelah validasi (union literal, dikirim ke API)
+export type CreateSppDTO = z.output<typeof createSppSchema>;
+export type CreateSppDetailDTO = z.output<typeof createSppDetailSchema>;
 
-
-
+// Input form (nilai awal termasuk string kosong untuk field select)
+export type CreateSppFormValues = z.input<typeof createSppSchema>;
+export type CreateSppDetailFormValues = z.input<typeof createSppDetailSchema>;
