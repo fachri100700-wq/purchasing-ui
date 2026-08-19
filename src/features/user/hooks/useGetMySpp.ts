@@ -5,7 +5,11 @@ import { GetMySppApi } from "../api/spp.api";
 import { toast } from "sonner";
 import type { QuerySppDTO } from "../schema/query-spp.schema";
 
-export function useGetMySpp() {
+interface UseGetMySppOptions {
+  initialQuery?: QuerySppDTO;
+}
+
+export function useGetMySpp(options?: UseGetMySppOptions) {
   const [data, setData] = useState<PaginatedData<SppData> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -34,8 +38,8 @@ export function useGetMySpp() {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchSpp({ limit: 5 });
-  }, [fetchSpp]);
+    fetchSpp(options?.initialQuery);
+  }, [fetchSpp, options?.initialQuery?.page, options?.initialQuery?.limit, options?.initialQuery?.search]);
 
   return { data, isLoading, isError, fetchSpp };
 }

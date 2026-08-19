@@ -11,7 +11,9 @@ import { getStatusBadge, getStepInfo } from "../../../helpers/sppMapper";
 
 
 export default function UserDashboard() {
-  const { data, isLoading, isError, fetchSpp } = useGetMySpp();
+  const { data, isLoading, isError, fetchSpp } = useGetMySpp({
+    initialQuery: { limit: 5 },
+  });
 
   if (isLoading) {
     return <DashboardLoading />;
