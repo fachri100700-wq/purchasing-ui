@@ -34,7 +34,7 @@ export function useGetMySpp() {
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchSpp();
+    fetchSpp({ limit: 5 });
   }, [fetchSpp]);
 
   return { data, isLoading, isError, fetchSpp };

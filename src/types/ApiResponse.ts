@@ -69,6 +69,8 @@ export type SppData = {
   createdAt?: string;
   sppDetails?: SppDetailData[];
   rejectionReason?: string | null;
+  name?: string,
+  division?: string
 };
 
 export type PaginationData = {

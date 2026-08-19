@@ -1,6 +1,8 @@
+import type { PurchaseType } from "../../types/ApiResponse";
+
 interface SppListItemProps {
   sppNo: string;
-  purchaseType: "Rutin" | "Kebutuhan";
+  purchaseType: PurchaseType;
   statusBadge: { text: string; colorClass: string };
   title: string;
   userName: string;
@@ -21,8 +23,9 @@ export default function SppListItem({
   amount,
   progressPercent,
 }: SppListItemProps) {
-  
-  const typeBadgeClass = purchaseType === "Rutin" 
+  const typeLabel = purchaseType === "routine" ? "Rutin" : "Kebutuhan";
+
+  const typeBadgeClass = purchaseType === "routine"
     ? "bg-sky-100 text-sky-700 border-sky-200"
     : "bg-amber-100 text-amber-700 border-amber-200";
 
@@ -33,7 +36,7 @@ export default function SppListItem({
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-medium text-slate-500">{sppNo}</span>
             <span className={`text-[10px] px-2 py-0.5 rounded-full border font-medium ${typeBadgeClass}`}>
-              {purchaseType}
+              {typeLabel}
             </span>
             <span className={`text-[10px] px-2 py-0.5 rounded-full border font-medium ${statusBadge.colorClass}`}>
               {statusBadge.text}

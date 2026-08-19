@@ -1,83 +1,29 @@
-import { useState, useMemo } from "react";
+import { useState} from "react";
 import DashboardLayout from "../../components/layout/DashboardLayout";
 import SppListItem from "../../components/ui/SppListItem";
-import { Search, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, FileText } from "lucide-react";
+import { useGetMySpp } from "../../features/user/hooks/useGetMySpp";
+import { getStatusBadge, getStepInfo } from "../../helpers/sppMapper";
+import DashboardLoading from "../../components/layout/Loading";
+import PageError from "../../components/layout/PageError";
+import { Link } from "react-router-dom";
 
-// Tipe data untuk mock SPP
-interface SppData {
-  id: string;
-  sppNo: string;
-  purchaseType: "Rutin" | "Kebutuhan";
-  statusBadge: { text: string; colorClass: string };
-  title: string;
-  userName: string;
-  division: string;
-  currentStepInfo: string;
-  amount: string;
-  progressPercent: number;
-}
-
-// Generate Mock Data sebanyak 35 item
-const generateMockData = (): SppData[] => {
-  const data: SppData[] = [];
-  const divisions = ["IT Infrastructure", "Operasional", "General Affair", "Warehouse", "Produksi", "HRD", "Keuangan"];
-  const types: ("Rutin" | "Kebutuhan")[] = ["Rutin", "Kebutuhan"];
-  const statuses = [
-    { text: "Menunggu Approval", colorClass: "bg-sky-100 text-sky-700 border-sky-200" },
-    { text: "Perlu Cek Stok", colorClass: "bg-amber-100 text-amber-700 border-amber-200" },
-    { text: "Sedang Diproses", colorClass: "bg-amber-100 text-amber-700 border-amber-200" },
-    { text: "Verifikasi Harga", colorClass: "bg-sky-100 text-sky-700 border-sky-200" },
-    { text: "Selesai", colorClass: "bg-emerald-100 text-emerald-700 border-emerald-200" },
-    { text: "Ditolak", colorClass: "bg-rose-100 text-rose-700 border-rose-200" },
-  ];
-
-  for (let i = 1; i <= 35; i++) {
-    const randomDiv = divisions[Math.floor(Math.random() * divisions.length)];
-    const randomType = types[Math.floor(Math.random() * types.length)];
-    const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
-    const amountVal = Math.floor(Math.random() * 50) + 1; // 1 to 50 million
-    const amountStr = `Rp ${amountVal}.${Math.floor(Math.random() * 900 + 100)}.000`;
-    
-    data.push({
-      id: `spp-${i}`,
-      sppNo: `SPP-2026-${(i).toString().padStart(4, '0')}`,
-      purchaseType: randomType,
-      statusBadge: randomStatus,
-      title: `Pengadaan Barang Kebutuhan ${i}`,
-      userName: `User ${i}`,
-      division: randomDiv,
-      currentStepInfo: `Tahap Ke-${Math.floor(Math.random() * 8) + 1}`,
-      amount: amountStr,
-      progressPercent: Math.floor(Math.random() * 100),
-    });
-  }
-  return data;
-};
-
-const mockSppList = generateMockData();
-const ITEMS_PER_PAGE = 10;
 
 export default function SppListPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Fungsi filtering berdasarkan pencarian
-  const filteredData = useMemo(() => {
-    return mockSppList.filter(spp => 
-      spp.sppNo.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      spp.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      spp.division.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [searchQuery]);
-
-  // Kalkulasi Pagination
-  const totalPages = Math.ceil(filteredData.length / ITEMS_PER_PAGE);
-  const currentData = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredData.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [filteredData, currentPage]);
-
+  const {data, isLoading, isError, fetchSpp} = useGetMySpp()
  
+   if (isLoading) {
+      return <DashboardLoading />;
+    }
+  
+    if (isError) {
+      return <PageError onRetry={() => fetchSpp({ limit: 5 })} />;
+    }
+
+  const sppList = data?.data ?? []
 
   return (
     <DashboardLayout>
@@ -109,25 +55,36 @@ export default function SppListPage() {
         
         {/* Data List */}
         <div className="space-y-3 flex-1 mb-6">
-          {currentData.length > 0 ? (
-            currentData.map(spp => (
-              <SppListItem
-                key={spp.id}
-                sppNo={spp.sppNo}
-                purchaseType={spp.purchaseType}
-                statusBadge={spp.statusBadge}
-                title={spp.title}
-                userName={spp.userName}
-                division={spp.division}
-                currentStepInfo={spp.currentStepInfo}
-                amount={spp.amount}
-                progressPercent={spp.progressPercent}
-              />
-            ))
+          {sppList?.length > 0 ? (
+            sppList?.slice(0, 5).map((spp) => {
+              const statusBadge = getStatusBadge(spp.status);
+              const stepInfo = getStepInfo(spp.status);
+
+              return (
+                <SppListItem
+                  key={spp.id}
+                  sppNo={spp.sppNo}
+                  purchaseType={spp.purchaseType}
+                  statusBadge={statusBadge}
+                  title={spp.title}
+                  userName={spp?.name ?? "-"}
+                  division={spp?.division ?? "-"}
+                  currentStepInfo={stepInfo.step}
+                  amount="-"
+                  progressPercent={stepInfo.progress}
+                />
+              );
+            })
           ) : (
-            <div className="flex flex-col items-center justify-center h-48 text-slate-500">
-              <Search className="w-10 h-10 mb-2 opacity-20" />
-              <p>Tidak ada data SPP yang ditemukan.</p>
+            <div className="flex flex-col items-center justify-center py-12 text-slate-500">
+              <FileText className="w-10 h-10 mb-2 opacity-20" />
+              <p>Belum ada pengajuan SPP.</p>
+              <Link
+                to="/spp/create"
+                className="mt-3 text-sm font-medium text-sky-600 hover:text-sky-700"
+              >
+                Ajukan SPP pertama Anda
+              </Link>
             </div>
           )}
         </div>
