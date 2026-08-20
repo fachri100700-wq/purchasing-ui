@@ -8,6 +8,8 @@ import { getStatusBadge, getStepInfo } from "../../helpers/sppMapper";
 import DashboardLoading from "../../components/layout/Loading";
 import PageError from "../../components/layout/PageError";
 import { useDebounce } from "../../hooks/useDebounce";
+import { Link } from "react-router-dom";
+import { useDeleteSpp } from "../../features/user/hooks/useDeleteSpp";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -22,6 +24,8 @@ export default function SppListPage() {
       limit: ITEMS_PER_PAGE,
     },
   });
+
+  const { handleDelete, isLoading: isDeleting } = useDeleteSpp({fetchSpp: () => { fetchSpp(); }})
   
   useEffect(() => {
     fetchSpp({
@@ -94,15 +98,23 @@ export default function SppListPage() {
                   userName={spp.name ?? "-"}
                   division={spp.division ?? "-"}
                   currentStepInfo={stepInfo.step}
-                  amount="-"
                   progressPercent={stepInfo.progress}
+                  date={spp.createdAt ?? "-"}
+                  isDeleting={isDeleting}
+                  handleDelete={() => handleDelete(spp.id)}
                 />
               );
             })
           ) : (
-            <div className="flex flex-col items-center justify-center h-48 text-slate-500">
+            <div className="flex flex-col items-center justify-center py-12 text-slate-500">
               <FileText className="w-10 h-10 mb-2 opacity-20" />
-              <p>Tidak ada data SPP yang ditemukan.</p>
+              <p>Belum ada pengajuan SPP.</p>
+              <Link
+                to="/spp/create"
+                className="mt-3 text-sm font-medium text-sky-600 hover:text-sky-700"
+              >
+                Ajukan SPP pertama Anda
+              </Link>
             </div>
           )}
         </div>

@@ -2,7 +2,11 @@ import { useState } from "react";
 import { DeleteSppApi } from "../api/spp.api";
 import { toast } from "sonner";
 
-export function useDeleteSpp() {
+interface UseDeleteSppOptions {
+  fetchSpp?: (...args: unknown[]) => unknown;
+}
+
+export function useDeleteSpp(options?: UseDeleteSppOptions) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async (id: string) => {
@@ -12,6 +16,8 @@ export function useDeleteSpp() {
       const res = await DeleteSppApi(id);
 
       toast.success("SPP berhasil dihapus");
+
+      await options?.fetchSpp?.();
 
       return res;
     } catch (error: unknown) {

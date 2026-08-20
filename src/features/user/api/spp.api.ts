@@ -1,12 +1,12 @@
-import type { ApiResponse, PaginatedData, SppData, SppDetailData } from "../../../types/ApiResponse";
+import type { ApiResponse, PaginatedData, SppData, SppDataNormal } from "../../../types/ApiResponse";
 import { api } from "../../../config/axios.config";
 import type { CreateSppDTO } from "../schema/create-spp.schema";
 import type { QuerySppDTO } from "../schema/query-spp.schema";
 import type { UpdateSppDTO } from "../schema/update-spp.schema";
 
 
-export async function CreateSppApi(dto: CreateSppDTO): Promise<SppDetailData> {
-  const res = await api.post<ApiResponse<SppDetailData>>("/api/spp", {
+export async function CreateSppApi(dto: CreateSppDTO): Promise<SppDataNormal> {
+  const res = await api.post<ApiResponse<SppDataNormal>>("/api/spp", {
     title: dto.title,
     purchaseType: dto.purchaseType,
     priority: dto.priority,
@@ -30,16 +30,17 @@ export async function GetMySppApi(
   return res.data.data;
 }
 
-export async function GetSppDetailApi(id: string): Promise<SppDetailData> {
-  const res = await api.get<ApiResponse<SppDetailData>>(`/api/spp/${id}`);
+export async function GetSppDetailApi(id: string): Promise<SppDataNormal> {
+  const res = await api.get<ApiResponse<SppDataNormal>>(`/api/spp/${id}`);
+  console.log("INI RES", res)
   return res.data.data;
 }
 
 export async function UpdateSppApi(
   id: string,
   dto: UpdateSppDTO,
-): Promise<SppDetailData> {
-  const res = await api.patch<ApiResponse<SppDetailData>>(`/api/spp/${id}`, dto);
+): Promise<SppDataNormal> {
+  const res = await api.patch<ApiResponse<SppDataNormal>>(`/api/spp/${id}`, dto);
   return res.data.data;
 }
 

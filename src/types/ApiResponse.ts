@@ -45,18 +45,45 @@ export type BudgetComplianceStatus =
   | "budget_exceeded"
   | "unbudgeted";
 
-export type SppDetailData = {
+export type ApprovalStatus = "approved" | "rejected" | "pending";
+
+export interface SppApproval {
+  id: string;
+  approvalStatus: ApprovalStatus;
+  createdAt: string;
+  user: UserData;
+}
+
+export interface SppDetailItem {
   id: string;
   sppId: string;
   productName: string;
-  brandOrType: string;
-  size: string;
+  brandOrType: string | null;
+  size: string | null;
   quantity: number;
-  intendedPurpose: string;
+  intendedPurpose: string | null;
   createdAt: string;
   updatedAt: string;
-};
+  deletedAt: string | null;
+}
+export interface SppDataNormal {
+  id: string;
+  userId: string;
+  sppNo: string;
+  title: string;
+  purchaseType: PurchaseType;
+  status: SppStatus;
+  priority: SppPriority;
+  sourcingType: SourcingType;
+  budgetComplianceStatus: BudgetComplianceStatus;
+  createdAt: string;
+  user: UserData;
+  sppDetails: SppDetailItem[];
+  approvals?: SppApproval[];
+  comparisonPapers?: unknown[];
+}
 
+//khusus untuk getAll karena menampilkan name dan division
 export type SppData = {
   id: string;
   sppNo: string;
@@ -67,7 +94,6 @@ export type SppData = {
   sourcingType: SourcingType;
   budgetComplianceStatus: BudgetComplianceStatus;
   createdAt?: string;
-  sppDetails?: SppDetailData[];
   rejectionReason?: string | null;
   name?: string,
   division?: string

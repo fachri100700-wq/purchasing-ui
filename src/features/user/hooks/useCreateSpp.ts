@@ -30,7 +30,6 @@ export function useCreateSpp(options?: UseCreateSppOptions) {
   });
 
   const onSubmit = async (payload: CreateSppFormValues) => {
-    // Parse eksplisit: hasil parse dijamin CreateSppDTO (union literal tervalidasi)
     const parsed = createSppSchema.parse(payload);
 
     try {

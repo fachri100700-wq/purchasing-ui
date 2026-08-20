@@ -72,8 +72,9 @@ export default function UserDashboard() {
                   userName={spp.name ?? "-"}
                   division={spp.division ?? "-"}
                   currentStepInfo={stepInfo.step}
-                  amount={"-"}
+
                   progressPercent={stepInfo.progress}
+                  date={spp.createdAt ?? "-"}
                 />
               );
             })

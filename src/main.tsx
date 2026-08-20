@@ -7,6 +7,7 @@ import LoginPage from "./app/auth/LoginPage";
 import DashboardPage from "./app/dashboard/Dashboard";
 import SppCreatePage from "./app/spp/SppCreatePage";
 import SppListPage from "./app/spp/SppListPage";
+import SppDetailPage from "./app/spp/SppDetail";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
       { path: "/dashboard", element: <DashboardPage /> },
       { path: "/spp/create", element: <SppCreatePage /> },
       { path: "/spp/list", element: <SppListPage /> },
+      { path: "/spp/detail/:id", element: <SppDetailPage /> },
     ],
   },
 ]);

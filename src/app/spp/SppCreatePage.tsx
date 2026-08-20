@@ -6,12 +6,13 @@ import { Plus, Trash2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { backgroundContainer } from "../../components/ui/styles";
 import { useCreateSpp } from "../../features/user/hooks/useCreateSpp";
+import IconButton from "../../components/ui/IconButton";
 
 export default function SppCreatePage() {
   const navigate = useNavigate();
   const { register, handleSubmit, errors, isSubmitting, control } =
     useCreateSpp({
-      onSuccess: () => navigate("/spp"),
+      onSuccess: () => navigate("/dashboard"),
     });
 
   const { fields, append, remove } = useFieldArray({
@@ -150,10 +151,7 @@ export default function SppCreatePage() {
 
               <div className="mt-4 space-y-3">
                 {fields.map((field, i) => (
-                  <div
-                    key={field.id}
-                    className={backgroundContainer}
-                  >
+                  <div key={field.id} className={backgroundContainer}>
                     <div className="grid gap-3 lg:grid-cols-[1.4fr_1fr_1fr_120px_auto]">
                       <Input
                         label="Nama barang"
@@ -187,15 +185,13 @@ export default function SppCreatePage() {
                       />
 
                       <div className="flex items-end">
-                        <button
-                          type="button"
-                          aria-label="Hapus item"
+                        <IconButton
+                          ariaLabel="Hapus item"
                           onClick={() => remove(i)}
                           disabled={fields.length === 1}
-                          className="flex h-[42px] w-[42px] items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition-colors hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600 disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           <Trash2 className="size-4" />
-                        </button>
+                        </IconButton>
                       </div>
                     </div>
 
@@ -215,11 +211,6 @@ export default function SppCreatePage() {
 
           <aside className="space-y-4">
             <div className="border border-white/60 bg-white/70 shadow-xl shadow-sky-900/10 backdrop-blur-xl rounded-2xl p-5">
-              {errors.root?.message && (
-                <p className="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs font-medium text-rose-600">
-                  {errors.root.message}
-                </p>
-              )}
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -228,7 +219,7 @@ export default function SppCreatePage() {
                 {isSubmitting ? "Mengirim..." : "Kirim ke Kepala Bagian"}
               </button>
               <Link
-                to="/spp"
+                to="/dashboard"
                 className="mt-2 block w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-center text-sm hover:bg-sky-100"
               >
                 Batal
