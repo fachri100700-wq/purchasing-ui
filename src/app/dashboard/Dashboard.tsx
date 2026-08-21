@@ -1,6 +1,6 @@
 import { userRoles } from "../../../../purchasing-service/src/common/enums/roles.enum";
 import UserDashboard from "../../features/user/_compenents/UserDashboard";
-import LeaderDivisionDashboard from "../../features/leader_divition/_compenents/LeaderDivisionDashboard";
+import LeaderDivisionDashboard from "../../features/leader_division/_compenents/LeaderDivisionDashboard";
 import GudangDashboard from "../../features/gudang/_compenents/GudangDashboard";
 import AuditDashboard from "../../features/audit/_compenents/AuditDashboard";
 import LeaderPurchasingDashboard from "../../features/leader_purchasing/_compenents/LeaderPurchasingDashboard";

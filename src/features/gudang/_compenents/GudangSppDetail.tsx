@@ -1,5 +1,6 @@
 import DashboardLayout from "../../../components/layout/DashboardLayout";
 import SppStage from "../../../components/layout/SppStage";
+import { Printer} from "lucide-react";
 import {
   budgetComplianceBadge,
   getStatusBadge,
@@ -15,9 +16,6 @@ import { useParams } from "react-router-dom";
 import { getSppStages } from "../../../helpers/getSppStages";
 import TableSppDetail from "../../../components/layout/TableSppDetail";
 import TableComparisonPaper from "../../../components/layout/TableComparisonPaper";
-import { Button } from "../../../components/ui/Button";
-import { Printer } from "lucide-react";
-import { handlePrint } from "../../../helpers/handlePrint";
 
 const vendorQuotes = [
   {
@@ -43,7 +41,8 @@ const vendorQuotes = [
   },
 ];
 
-export default function UserSppDetail() {
+export default function GudangSppDetail() {
+
   const { id } = useParams();
 
   const { data, isLoading, isError } = useGetSppDetail(id as string);
@@ -92,32 +91,47 @@ export default function UserSppDetail() {
         {/* KOLOM KIRI */}
         <div className="space-y-6">
           <TableSppDetail
-            purchaseType={purchaseType}
-            priority={priority}
-            sourcing={sourcing}
-            budgetCompliance={budgetCompliance}
-            currentStatus={currentStatus}
-            data={data}
+          purchaseType={purchaseType}
+          priority={priority}
+          sourcing={sourcing}
+          budgetCompliance={budgetCompliance}
+          currentStatus={currentStatus}
+          data={data}
           />
 
           {/* PERBANDINGAN HARGA VENDOR */}
-          <TableComparisonPaper comparisonPaper={vendorQuotes} />
+          <TableComparisonPaper comparisonPaper={vendorQuotes}/>
         </div>
 
         {/* KOLOM KANAN */}
         <aside className="space-y-4">
           {/* ALUR APPROVAL LOG */}
-          <SppStage progres={progres} stages={stages} />
+          <SppStage
+          progres={progres}
+          stages={stages}
+          />
 
           {/* ACTION BUTTONS */}
           <div className="border border-white/50 bg-white/60 shadow-lg shadow-sky-900/5 backdrop-blur-md rounded-2xl p-5">
-            <div className="grid gap-2">
-              <Button
-                variant="secondary"
-                icon={<Printer className="size-4" />}
-                label="Cetak Document"
-                onClick={handlePrint}
-              />
+            <div className="mt-4 grid gap-2">
+              <button
+                type="button"
+                className="rounded-xl bg-slate-900 px-4 py-2.5 text-xs font-medium text-white hover:bg-slate-800 transition-all disabled:opacity-50"
+              >
+                Setujui
+              </button>
+              <button
+                type="button"
+                className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-all disabled:opacity-50"
+              >
+                Tolak
+              </button>
+              <button
+                type="button"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-slate-50 transition-all"
+              >
+                <Printer className="size-4" /> Cetak dokumen
+              </button>
             </div>
           </div>
         </aside>

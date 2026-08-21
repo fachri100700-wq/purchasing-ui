@@ -1,5 +1,6 @@
 import DashboardLayout from "../../../components/layout/DashboardLayout";
 import SppStage from "../../../components/layout/SppStage";
+import { Printer } from "lucide-react";
 import {
   budgetComplianceBadge,
   getStatusBadge,
@@ -8,7 +9,7 @@ import {
   purchaseTypeBadge,
   sourcingBadge,
 } from "../../../helpers/sppMapper";
-import { useGetSppDetail } from "../../../features/user/hooks/useGetSppDetail";
+import { useGetSppDetail } from "../../user/hooks/useGetSppDetail";
 import DashboardLoading from "../../../components/layout/Loading";
 import PageError from "../../../components/layout/PageError";
 import { useParams } from "react-router-dom";
@@ -16,8 +17,9 @@ import { getSppStages } from "../../../helpers/getSppStages";
 import TableSppDetail from "../../../components/layout/TableSppDetail";
 import TableComparisonPaper from "../../../components/layout/TableComparisonPaper";
 import { Button } from "../../../components/ui/Button";
-import { Printer } from "lucide-react";
 import { handlePrint } from "../../../helpers/handlePrint";
+import { useApproveDireksi } from "../hooks/useApproveDireksi";
+import { useRejectDireksi } from "../hooks/useRejectDireksi";
 
 const vendorQuotes = [
   {
@@ -43,10 +45,13 @@ const vendorQuotes = [
   },
 ];
 
-export default function UserSppDetail() {
+export default function LeaderDivisionSppDetail() {
   const { id } = useParams();
 
   const { data, isLoading, isError } = useGetSppDetail(id as string);
+
+  const { isLoading: isApproving, handleApprove } = useApproveDireksi();
+  const { isLoading: isRejecting, handleReject } = useRejectDireksi();
 
   if (isLoading || !data) {
     return <DashboardLoading />;
@@ -111,7 +116,27 @@ export default function UserSppDetail() {
 
           {/* ACTION BUTTONS */}
           <div className="border border-white/50 bg-white/60 shadow-lg shadow-sky-900/5 backdrop-blur-md rounded-2xl p-5">
-            <div className="grid gap-2">
+            <div className="mt-4 grid gap-2">
+              <Button
+                variant="primary"
+                label="Setujui"
+                onClick={() => {
+                  if (id) {
+                    handleApprove(id);
+                  }
+                }}
+                isLoading={isApproving}
+              />
+              <Button
+                variant="danger"
+                label="Tolak"
+                onClick={() => {
+                  if (id) {
+                    handleReject(id);
+                  }
+                }}
+                isLoading={isRejecting}
+              />
               <Button
                 variant="secondary"
                 icon={<Printer className="size-4" />}

@@ -5,9 +5,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./components/layout/RootLayout";
 import LoginPage from "./app/auth/LoginPage";
 import DashboardPage from "./app/dashboard/Dashboard";
-import SppCreatePage from "./app/spp/SppCreatePage";
-import SppListPage from "./app/spp/SppListPage";
-import SppDetailPage from "./app/spp/SppDetail";
+import SppCreatePage from "./app/spp/_components/SppCreatePage";
+import SppListPage from "./app/spp/_components/SppListPage";
+import SppDetailPage from "./app/spp/_components/SppDetail";
 
 const router = createBrowserRouter([
   {

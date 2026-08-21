@@ -32,6 +32,7 @@ export function useGetSppDetail(id: string) {
   }, [id]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchSppDetail();
   }, [fetchSppDetail]);
 

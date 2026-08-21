@@ -41,7 +41,7 @@ export default function SppListItem({
       : "bg-amber-100 text-amber-700 border-amber-200";
 
   return (
-    <div className="group flex cursor-pointer flex-col gap-3 rounded-xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur-sm transition-colors hover:border-slate-300">
+    <div className="group flex cursor-pointer flex-col gap-3 rounded-xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur-sm transition-colors hover:border-slate-300 mt-4">
       <div className="flex items-start justify-between">
         <div>
           <div className="mb-1 flex items-center gap-2">

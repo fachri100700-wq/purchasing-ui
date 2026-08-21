@@ -1,12 +1,13 @@
 import { useFieldArray, Controller } from "react-hook-form";
-import DashboardLayout from "../../components/layout/DashboardLayout";
-import Input from "../../components/ui/Input";
-import Select from "../../components/ui/Select";
+import DashboardLayout from "../../../components/layout/DashboardLayout";
+import Input from "../../../components/ui/Input";
+import Select from "../../../components/ui/Select";
 import { Plus, Trash2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { backgroundContainer } from "../../components/ui/styles";
-import { useCreateSpp } from "../../features/user/hooks/useCreateSpp";
-import IconButton from "../../components/ui/IconButton";
+import { backgroundContainer } from "../../../components/ui/styles";
+import { useCreateSpp } from "../../../features/user/hooks/useCreateSpp";
+import IconButton from "../../../components/ui/IconButton";
+import { Button } from "../../../components/ui/Button";
 
 export default function SppCreatePage() {
   const navigate = useNavigate();
@@ -211,13 +212,15 @@ export default function SppCreatePage() {
 
           <aside className="space-y-4">
             <div className="border border-white/60 bg-white/70 shadow-xl shadow-sky-900/10 backdrop-blur-xl rounded-2xl p-5">
-              <button
+              <Button
                 type="submit"
+                variant="primary"
                 disabled={isSubmitting}
-                className="mt-4 w-full rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? "Mengirim..." : "Kirim ke Kepala Bagian"}
-              </button>
+                isLoading={isSubmitting}
+                className="w-full"
+                label={isSubmitting ? "Mengirim..." : "Kirim ke Kepala Bagian"}
+              />
+
               <Link
                 to="/dashboard"
                 className="mt-2 block w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-center text-sm hover:bg-sky-100"

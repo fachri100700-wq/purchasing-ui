@@ -3,22 +3,22 @@ import SppListItem from "../../../components/ui/SppListItem";
 import { FileText, Clock, CheckCircle, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { backgroundContainer } from "../../../components/ui/styles";
-import { useGetMySpp } from "../hooks/useGetMySpp";
 import DashboardLoading from "../../../components/layout/Loading";
 import PageError from "../../../components/layout/PageError";
 import { getStatusBadge, getStepInfo } from "../../../helpers/sppMapper";
-import { useDeleteSpp } from "../hooks/useDeleteSpp";
+import { useGetLeaderDivision } from "../hooks/useGetLeaderDivision";
+import { useDeleteSpp } from "../../user/hooks/useDeleteSpp";
 
-export default function UserDashboard() {
-  const { data, isLoading, isError, fetchSpp } = useGetMySpp({
+export default function LeaderDivisionDashboard() {
+  const { data, isLoading, isError, fetchSpp } = useGetLeaderDivision({
     initialQuery: { limit: 5 },
   });
 
-  const { handleDelete, isLoading: isDeleting } = useDeleteSpp({
-    fetchSpp: () => {
-      fetchSpp();
-    },
-  });
+   const { handleDelete, isLoading: isDeleting } = useDeleteSpp({
+      fetchSpp: () => {
+        fetchSpp();
+      },
+    });
 
   if (isLoading) {
     return <DashboardLoading />;
@@ -43,12 +43,6 @@ export default function UserDashboard() {
               Pantau status pengajuan SPP Anda
             </p>
           </div>
-          <Link
-            to="/spp/create"
-            className="bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm py-2.5 px-5 rounded-xl transition-all shadow-md active:scale-[0.99]"
-          >
-            Ajukan SPP Baru
-          </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -82,7 +76,7 @@ export default function UserDashboard() {
             Pengajuan Terbaru Anda
           </h2>
           <Link
-            to="/spp/list"
+            to="/spp"
             className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1"
           >
             Lihat semua <ArrowRight className="w-3 h-3" />
@@ -117,13 +111,7 @@ export default function UserDashboard() {
           ) : (
             <div className="flex flex-col items-center justify-center py-12 text-slate-500">
               <FileText className="w-10 h-10 mb-2 opacity-20" />
-              <p>Belum ada pengajuan SPP.</p>
-              <Link
-                to="/spp/create"
-                className="mt-3 text-sm font-medium text-sky-600 hover:text-sky-700"
-              >
-                Ajukan SPP pertama Anda
-              </Link>
+              <p>Belum ada pengajuan SPP</p>
             </div>
           )}
         </div>

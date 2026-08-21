@@ -1,32 +1,36 @@
 import { useEffect, useState } from "react";
-import DashboardLayout from "../../components/layout/DashboardLayout";
-import SppListItem from "../../components/ui/SppListItem";
-import Pagination from "../../components/ui/Pagination";
+import DashboardLayout from "../../../components/layout/DashboardLayout";
+import SppListItem from "../../../components/ui/SppListItem";
+import Pagination from "../../../components/ui/Pagination";
 import { Search, FileText } from "lucide-react";
-import { useGetMySpp } from "../../features/user/hooks/useGetMySpp";
-import { getStatusBadge, getStepInfo } from "../../helpers/sppMapper";
-import DashboardLoading from "../../components/layout/Loading";
-import PageError from "../../components/layout/PageError";
-import { useDebounce } from "../../hooks/useDebounce";
+import { getStatusBadge, getStepInfo } from "../../../helpers/sppMapper";
+import DashboardLoading from "../../../components/layout/Loading";
+import PageError from "../../../components/layout/PageError";
+import { useDebounce } from "../../../hooks/useDebounce";
 import { Link } from "react-router-dom";
-import { useDeleteSpp } from "../../features/user/hooks/useDeleteSpp";
+import { useDeleteSpp } from "../../user/hooks/useDeleteSpp";
+import { useGetLeaderDivision } from "../hooks/useGetLeaderDivision";
 
 const ITEMS_PER_PAGE = 10;
 
-export default function SppListPage() {
+export default function LeaderDivisionSppListPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
-  const { data, isLoading, isError, fetchSpp } = useGetMySpp({
+  const { data, isLoading, isError, fetchSpp } = useGetLeaderDivision({
     initialQuery: {
       page: 1,
       limit: ITEMS_PER_PAGE,
     },
   });
 
-  const { handleDelete, isLoading: isDeleting } = useDeleteSpp({fetchSpp: () => { fetchSpp(); }})
-  
+  const { handleDelete, isLoading: isDeleting } = useDeleteSpp({
+    fetchSpp: () => {
+      fetchSpp();
+    },
+  });
+
   useEffect(() => {
     fetchSpp({
       page: 1,
@@ -40,7 +44,11 @@ export default function SppListPage() {
   }
 
   if (isError) {
-    return <PageError onRetry={() => fetchSpp({ page: currentPage, limit: ITEMS_PER_PAGE })} />;
+    return (
+      <PageError
+        onRetry={() => fetchSpp({ page: currentPage, limit: ITEMS_PER_PAGE })}
+      />
+    );
   }
 
   const sppList = data?.data ?? [];
@@ -49,7 +57,11 @@ export default function SppListPage() {
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    fetchSpp({ page, limit: ITEMS_PER_PAGE, search: debouncedSearchQuery || undefined });
+    fetchSpp({
+      page,
+      limit: ITEMS_PER_PAGE,
+      search: debouncedSearchQuery || undefined,
+    });
   };
 
   return (
@@ -57,8 +69,12 @@ export default function SppListPage() {
       {/* Header */}
       <div className=" flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Daftar Lengkap SPP</h1>
-          <p className="text-sm text-slate-600">Seluruh pengajuan SPP beserta status terkininya.</p>
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+            Daftar Lengkap SPP
+          </h1>
+          <p className="text-sm text-slate-600">
+            Seluruh pengajuan SPP beserta status terkininya.
+          </p>
         </div>
 
         {/* Search Bar */}
@@ -89,20 +105,22 @@ export default function SppListPage() {
               const stepInfo = getStepInfo(spp.status);
 
               return (
-                <SppListItem
-                  key={spp.id}
-                  sppNo={spp.sppNo}
-                  purchaseType={spp.purchaseType}
-                  statusBadge={statusBadge}
-                  title={spp.title}
-                  userName={spp.name ?? "-"}
-                  division={spp.division ?? "-"}
-                  currentStepInfo={stepInfo.step}
-                  progressPercent={stepInfo.progress}
-                  date={spp.createdAt ?? "-"}
-                  isDeleting={isDeleting}
-                  handleDelete={() => handleDelete(spp.id)}
-                />
+                <Link to={`/spp/detail/${spp.id}`}>
+                  <SppListItem
+                    key={spp.id}
+                    sppNo={spp.sppNo}
+                    purchaseType={spp.purchaseType}
+                    statusBadge={statusBadge}
+                    title={spp.title}
+                    userName={spp.name ?? "-"}
+                    division={spp.division ?? "-"}
+                    currentStepInfo={stepInfo.step}
+                    progressPercent={stepInfo.progress}
+                    date={spp.createdAt ?? "-"}
+                    isDeleting={isDeleting}
+                    handleDelete={() => handleDelete(spp.id)}
+                  />
+                </Link>
               );
             })
           ) : (
