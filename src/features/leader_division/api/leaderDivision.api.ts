@@ -30,8 +30,8 @@ export async function LeaderDivisionApproveApi(id: string): Promise<SppDataNorma
   return res.data.data
 }
 
-export async function LeaderDivisionRejectApi(id: string): Promise<SppDataNormal> {
-  const res = await api.patch<ApiResponse<SppDataNormal>>(`/api/leader-division/reject/${id}`)
+export async function LeaderDivisionRejectApi(id: string, rejectionReason?: string): Promise<SppDataNormal> {
+  const res = await api.patch<ApiResponse<SppDataNormal>>(`/api/leader-division/reject/${id}`, {rejectionReason: rejectionReason})
 
   return res.data.data
 }

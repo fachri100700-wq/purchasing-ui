@@ -1,35 +1,49 @@
-import { useCallback, useState } from "react";
-import {  LeaderDivisionRejectApi } from "../api/leaderDivision.api";
+import { useCallback } from "react";
+import { LeaderDivisionRejectApi } from "../api/leaderDivision.api";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { rejectSchema, type RejectDTO } from "../schema/reject.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 export function useRejectLeaderDivision() {
   const navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const form = useForm<RejectDTO>({
+    resolver: zodResolver(rejectSchema),
+    defaultValues: {
+      rejectionReason: "",
+    },
+  });
 
-  const handleReject = useCallback(async (id: string) => {
-    try {
-      setIsLoading(true);
+  const onSubmit = useCallback(
+    async (id: string, data?: RejectDTO) => {
+      try {
+        const res = await LeaderDivisionRejectApi(id, data?.rejectionReason);
 
-      const res = await LeaderDivisionRejectApi(id);
+        navigate("/dashboard");
+        toast.success("SPP telah berhasil ditolak");
 
-      navigate("/dashboard")
+        return res;
+      } catch (error) {
+        const err = error as { response?: { data?: { message?: string } } };
+        toast.error(
+          err.response?.data?.message ||
+            "Terjadi kesalahan saat menolak SPP",
+        );
+      }
+    },
+    [navigate]
+  );
 
-      toast.success("Spp telah berhasil di tolak")
+  const handleReject = (id: string) => {
+    return form.handleSubmit((data) => onSubmit(id, data))();
+  };
 
-      return res;
-    } catch (error) {
-      const err = error as { response?: { data?: { message?: string } } };
-      toast.error(
-        err.response?.data?.message ||
-          "Terjadi kesalahan saat mengambil detail SPP",
-      );
-
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  return { isLoading, handleReject };
+  return {
+    register: form.register,
+    handleSubmit: handleReject,
+    errors: form.formState.errors,
+    isRejecting: form.formState.isSubmitting,
+  };
 }

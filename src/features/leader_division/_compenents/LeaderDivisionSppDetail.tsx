@@ -20,6 +20,8 @@ import { Button } from "../../../components/ui/Button";
 import { handlePrint } from "../../../helpers/handlePrint";
 import { useApproveLeaderDivision } from "../hooks/useApproveLeaderDivision";
 import { useRejectLeaderDivision } from "../hooks/useRejectLeaderDivision";
+import { useState } from "react";
+import { ApproveConfirmModal, RejectConfirmModal } from "../../../components/ui/ConfirmModal";
 
 const vendorQuotes = [
   {
@@ -48,10 +50,13 @@ const vendorQuotes = [
 export default function LeaderDivisionSppDetail() {
   const { id } = useParams();
 
+  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+
   const { data, isLoading, isError } = useGetSppDetail(id as string);
 
   const { isLoading: isApproving, handleApprove } = useApproveLeaderDivision();
-  const { isLoading: isRejecting, handleReject } = useRejectLeaderDivision();
+  const {register, handleSubmit, errors, isRejecting} = useRejectLeaderDivision()
 
   if (isLoading || !data) {
     return <DashboardLoading />;
@@ -120,23 +125,9 @@ export default function LeaderDivisionSppDetail() {
               <Button
                 variant="primary"
                 label="Setujui"
-                onClick={() => {
-                  if (id) {
-                    handleApprove(id);
-                  }
-                }}
-                isLoading={isApproving}
+                onClick={() => setIsApproveModalOpen(true)}
               />
-              <Button
-                variant="danger"
-                label="Tolak"
-                onClick={() => {
-                  if (id) {
-                    handleReject(id);
-                  }
-                }}
-                isLoading={isRejecting}
-              />
+              <Button variant="danger" label="Tolak" onClick={() => setIsRejectModalOpen(true)}/>
               <Button
                 variant="secondary"
                 icon={<Printer className="size-4" />}
@@ -147,6 +138,19 @@ export default function LeaderDivisionSppDetail() {
           </div>
         </aside>
       </div>
+      {isApproveModalOpen === true && (
+        <ApproveConfirmModal
+          isLoading={isApproving}
+          onClose={() => setIsApproveModalOpen(false)}
+          onConfirm={() => handleApprove(id as string)}
+        />
+      )}
+
+      {isRejectModalOpen === true && (
+        <RejectConfirmModal
+        isLoading={isRejecting}
+        />
+      )}
     </DashboardLayout>
   );
 }
