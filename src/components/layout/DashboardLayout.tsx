@@ -42,7 +42,7 @@ export default function DashboardLayout({
     <div className="min-h-screen p-4 lg:p-6 flex gap-6 w-full">
       {/* Sidebar */}
       <aside
-        className={`w-64 flex flex-col justify-between hidden md:flex ${backgroundContainer}`}
+        className={`sticky top-18 h-[calc(100vh-4.5rem)] max-h-[832px] w-64 flex flex-col justify-between hidden md:flex ${backgroundContainer}`}
       >
         <div>
           <div className="flex items-center gap-3 mb-8 px-2 mt-2">
