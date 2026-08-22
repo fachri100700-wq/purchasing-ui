@@ -1,25 +1,18 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { LeaderDivisionRejectApi } from "../api/leaderDivision.api";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { rejectSchema, type RejectDTO } from "../schema/reject.schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 
 export function useRejectLeaderDivision() {
   const navigate = useNavigate();
+  const [isRejecting, setIsRejecting] = useState(false);
 
-  const form = useForm<RejectDTO>({
-    resolver: zodResolver(rejectSchema),
-    defaultValues: {
-      rejectionReason: "",
-    },
-  });
-
-  const onSubmit = useCallback(
-    async (id: string, data?: RejectDTO) => {
+  const handleReject = useCallback(
+    async (id: string, rejectionReason: string) => {
       try {
-        const res = await LeaderDivisionRejectApi(id, data?.rejectionReason);
+        setIsRejecting(true);
+
+        const res = await LeaderDivisionRejectApi(id, rejectionReason);
 
         navigate("/dashboard");
         toast.success("SPP telah berhasil ditolak");
@@ -31,19 +24,15 @@ export function useRejectLeaderDivision() {
           err.response?.data?.message ||
             "Terjadi kesalahan saat menolak SPP",
         );
+      } finally {
+        setIsRejecting(false);
       }
     },
     [navigate]
   );
 
-  const handleReject = (id: string) => {
-    return form.handleSubmit((data) => onSubmit(id, data))();
-  };
-
   return {
-    register: form.register,
-    handleSubmit: handleReject,
-    errors: form.formState.errors,
-    isRejecting: form.formState.isSubmitting,
+    handleReject,
+    isRejecting,
   };
 }

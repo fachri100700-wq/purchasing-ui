@@ -24,14 +24,24 @@ export async function GetLeaderDivisionApi(
   return res.data.data;
 }
 
-export async function LeaderDivisionApproveApi(id: string): Promise<SppDataNormal> {
-  const res = await api.patch<ApiResponse<SppDataNormal>>(`/api/leader-division/approve/${id}`)
+export async function LeaderDivisionApproveApi(
+  id: string,
+): Promise<SppDataNormal> {
+  const res = await api.patch<ApiResponse<SppDataNormal>>(
+    `/api/leader-division/approve/${id}`,
+  );
 
-  return res.data.data
+  return res.data.data;
 }
 
-export async function LeaderDivisionRejectApi(id: string, rejectionReason?: string): Promise<SppDataNormal> {
-  const res = await api.patch<ApiResponse<SppDataNormal>>(`/api/leader-division/reject/${id}`, {rejectionReason: rejectionReason})
+export async function LeaderDivisionRejectApi(
+  id: string,
+  rejectionReason?: string,
+): Promise<SppDataNormal> {
+  const res = await api.patch<ApiResponse<SppDataNormal>>(
+    `/api/leader-division/reject/${id}`,
+    { rejectionReason: rejectionReason },
+  );
 
-  return res.data.data
+  return res.data.data;
 }

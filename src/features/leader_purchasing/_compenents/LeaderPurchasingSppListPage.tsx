@@ -5,7 +5,7 @@ import Pagination from "../../../components/ui/Pagination";
 import { Search, FileText } from "lucide-react";
 import { useGetMySpp } from "../../../features/user/hooks/useGetMySpp";
 import { getStatusBadge, getStepInfo } from "../../../helpers/sppMapper";
-import DashboardLoading from "../../../components/layout/Loading";
+import DashboardLoading from "../../../components/ui/Loading";
 import PageError from "../../../components/layout/PageError";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { Link } from "react-router-dom";

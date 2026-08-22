@@ -3,7 +3,7 @@ import SppListItem from "../../../components/ui/SppListItem";
 import { FileText, Clock, CheckCircle, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { backgroundContainer } from "../../../components/ui/styles";
-import DashboardLoading from "../../../components/layout/Loading";
+import DashboardLoading from "../../../components/ui/Loading";
 import PageError from "../../../components/layout/PageError";
 import { getStatusBadge, getStepInfo } from "../../../helpers/sppMapper";
 

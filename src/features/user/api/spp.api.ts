@@ -32,7 +32,7 @@ export async function GetMySppApi(
 
 export async function GetSppDetailApi(id: string): Promise<SppDataNormal> {
   const res = await api.get<ApiResponse<SppDataNormal>>(`/api/spp/${id}`);
-  console.log("INI RES", res)
+
   return res.data.data;
 }
 

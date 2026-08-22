@@ -8,11 +8,11 @@ export function useRejectDireksi() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleReject = useCallback(async (id: string) => {
+  const handleReject = useCallback(async (id: string, rejectionReason: string) => {
     try {
       setIsLoading(true);
 
-      const res = await DireksiRejectApi(id);
+      const res = await DireksiRejectApi(id, rejectionReason);
 
       navigate("/dashboard")
 

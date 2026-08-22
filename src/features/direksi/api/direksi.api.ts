@@ -25,13 +25,21 @@ export async function GetDireksiApi(
 }
 
 export async function DireksiApproveApi(id: string): Promise<SppDataNormal> {
-  const res = await api.patch<ApiResponse<SppDataNormal>>(`/api/direksi/approve/${id}`)
+  const res = await api.patch<ApiResponse<SppDataNormal>>(
+    `/api/direksi/approve/${id}`,
+  );
 
-  return res.data.data
+  return res.data.data;
 }
 
-export async function DireksiRejectApi(id: string): Promise<SppDataNormal> {
-  const res = await api.patch<ApiResponse<SppDataNormal>>(`/api/direksi/reject/${id}`)
+export async function DireksiRejectApi(
+  id: string,
+  rejectionReason: string,
+): Promise<SppDataNormal> {
+  const res = await api.patch<ApiResponse<SppDataNormal>>(
+    `/api/direksi/reject/${id}`,
+    { rejectionReason: rejectionReason },
+  );
 
-  return res.data.data
+  return res.data.data;
 }

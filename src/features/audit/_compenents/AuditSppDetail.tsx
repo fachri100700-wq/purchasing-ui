@@ -10,7 +10,7 @@ import {
   sourcingBadge,
 } from "../../../helpers/sppMapper";
 import { useGetSppDetail } from "../../user/hooks/useGetSppDetail";
-import DashboardLoading from "../../../components/layout/Loading";
+import DashboardLoading from "../../../components/ui/Loading";
 import PageError from "../../../components/layout/PageError";
 import { useParams } from "react-router-dom";
 import { getSppStages } from "../../../helpers/getSppStages";
@@ -18,6 +18,12 @@ import TableSppDetail from "../../../components/layout/TableSppDetail";
 import TableComparisonPaper from "../../../components/layout/TableComparisonPaper";
 import { Button } from "../../../components/ui/Button";
 import { handlePrint } from "../../../helpers/handlePrint";
+import { useState } from "react";
+import {
+  ApproveConfirmModal,
+  RejectConfirmModal,
+} from "../../../components/ui/ConfirmModal";
+import RejectionReason from "../../../components/layout/RejectionReason";
 import { useApproveAudit } from "../hooks/useApproveAudit";
 import { useRejectAudit } from "../hooks/useRejectAudit";
 
@@ -48,6 +54,9 @@ const vendorQuotes = [
 export default function AuditSppDetail() {
   const { id } = useParams();
 
+  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+
   const { data, isLoading, isError } = useGetSppDetail(id as string);
 
   const { isLoading: isApproving, handleApprove } = useApproveAudit();
@@ -69,6 +78,10 @@ export default function AuditSppDetail() {
   const progres = getStepInfo(data?.status);
 
   const stages = getSppStages(data);
+
+  const rejectedApproval = data.approvals
+    ?.filter((approval) => approval.approvalStatus === "rejected")
+    .at(-1);
 
   return (
     <DashboardLayout>
@@ -105,6 +118,10 @@ export default function AuditSppDetail() {
             data={data}
           />
 
+          {rejectedApproval?.rejectionReason && (
+            <RejectionReason reason={rejectedApproval.rejectionReason} />
+          )}
+
           {/* PERBANDINGAN HARGA VENDOR */}
           <TableComparisonPaper comparisonPaper={vendorQuotes} />
         </div>
@@ -120,22 +137,12 @@ export default function AuditSppDetail() {
               <Button
                 variant="primary"
                 label="Setujui"
-                onClick={() => {
-                  if (id) {
-                    handleApprove(id);
-                  }
-                }}
-                isLoading={isApproving}
+                onClick={() => setIsApproveModalOpen(true)}
               />
               <Button
                 variant="danger"
                 label="Tolak"
-                onClick={() => {
-                  if (id) {
-                    handleReject(id);
-                  }
-                }}
-                isLoading={isRejecting}
+                onClick={() => setIsRejectModalOpen(true)}
               />
               <Button
                 variant="secondary"
@@ -147,6 +154,21 @@ export default function AuditSppDetail() {
           </div>
         </aside>
       </div>
+      {isApproveModalOpen === true && (
+        <ApproveConfirmModal
+          isLoading={isApproving}
+          onClose={() => setIsApproveModalOpen(false)}
+          onConfirm={() => handleApprove(id as string)}
+        />
+      )}
+
+      {isRejectModalOpen === true && (
+        <RejectConfirmModal
+          isLoading={isRejecting}
+          onClose={() => setIsRejectModalOpen(false)}
+          onConfirm={(reason) => handleReject(id as string, reason)}
+        />
+      )}
     </DashboardLayout>
   );
 }

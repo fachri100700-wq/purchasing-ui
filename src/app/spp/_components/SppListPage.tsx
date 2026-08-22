@@ -6,7 +6,6 @@ import AuditSppListPage from "../../../features/audit/_compenents/AuditSppListPa
 import LeaderPurchasingSppListPage from "../../../features/leader_purchasing/_compenents/LeaderPurchasingSppListPage";
 import LeaderAuditSppListPage from "../../../features/leader_audit/_compenents/LeaderAuditSppListPage";
 import DireksiSppListPage from "../../../features/direksi/_compenents/DireksiSppListPage";
-import KasirSppListPage from "../../../features/kasir/_compenents/KasirSppListPage";
 import { ShieldAlert } from "lucide-react";
 import DashboardLayout from "../../../components/layout/DashboardLayout";
 import { useSession } from "../../../features/auth/hooks/useSession";
@@ -30,8 +29,6 @@ export default function SppListPage() {
         return <LeaderAuditSppListPage />;
       case userRoles.DIREKSI:
         return <DireksiSppListPage />;
-      case userRoles.KASIR:
-        return <KasirSppListPage />;
       default:
         return (
           <DashboardLayout>

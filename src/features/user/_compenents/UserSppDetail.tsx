@@ -9,7 +9,7 @@ import {
   sourcingBadge,
 } from "../../../helpers/sppMapper";
 import { useGetSppDetail } from "../../../features/user/hooks/useGetSppDetail";
-import DashboardLoading from "../../../components/layout/Loading";
+import DashboardLoading from "../../../components/ui/Loading";
 import PageError from "../../../components/layout/PageError";
 import { useParams } from "react-router-dom";
 import { getSppStages } from "../../../helpers/getSppStages";
@@ -18,6 +18,7 @@ import TableComparisonPaper from "../../../components/layout/TableComparisonPape
 import { Button } from "../../../components/ui/Button";
 import { Printer } from "lucide-react";
 import { handlePrint } from "../../../helpers/handlePrint";
+import RejectionReason from "../../../components/layout/RejectionReason";
 
 const vendorQuotes = [
   {
@@ -65,6 +66,10 @@ export default function UserSppDetail() {
 
   const stages = getSppStages(data);
 
+  const rejectedApproval = data.approvals
+    ?.filter((approval) => approval.approvalStatus === "reject")
+    .at(-1);
+
   return (
     <DashboardLayout>
       {/* Header Utama Page */}
@@ -99,6 +104,10 @@ export default function UserSppDetail() {
             currentStatus={currentStatus}
             data={data}
           />
+
+          {rejectedApproval?.rejectionReason && (
+            <RejectionReason reason={rejectedApproval.rejectionReason} />
+          )}
 
           {/* PERBANDINGAN HARGA VENDOR */}
           <TableComparisonPaper comparisonPaper={vendorQuotes} />

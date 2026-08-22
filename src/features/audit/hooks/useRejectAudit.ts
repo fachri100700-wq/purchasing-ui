@@ -8,11 +8,11 @@ export function useRejectAudit() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleReject = useCallback(async (id: string) => {
+  const handleReject = useCallback(async (id: string, rejectionReason: string) => {
     try {
       setIsLoading(true);
 
-      const res = await AuditRejectApi(id);
+      const res = await AuditRejectApi(id, rejectionReason);
 
       navigate("/dashboard")
 

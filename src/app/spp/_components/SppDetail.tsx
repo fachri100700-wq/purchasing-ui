@@ -9,7 +9,6 @@ import AuditSppDetail from "../../../features/audit/_compenents/AuditSppDetail";
 import LeaderPurchasingSppDetail from "../../../features/leader_purchasing/_compenents/LeaderPurchasingSppDetail";
 import LeaderAuditSppDetail from "../../../features/leader_audit/_compenents/LeaderAuditSppDetail";
 import DireksiSppDetail from "../../../features/direksi/_compenents/DireksiSppDetail";
-import KasirSppDetail from "../../../features/kasir/_compenents/KasirSppDetail";
 
 export default function SppListPage() {
   const { user } = useSession();
@@ -30,8 +29,6 @@ export default function SppListPage() {
         return <LeaderAuditSppDetail />;
       case userRoles.DIREKSI:
         return <DireksiSppDetail />;
-      case userRoles.KASIR:
-        return <KasirSppDetail />;
       default:
         return (
           <DashboardLayout>

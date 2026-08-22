@@ -2,7 +2,6 @@ import {
   CheckCircle2,
   Loader2,
   X,
-  AlertTriangle,
   XCircle,
 } from "lucide-react";
 import { backgroundContainer } from "../../components/ui/styles";
@@ -157,10 +156,6 @@ export function RejectConfirmModal({
 
         {/* Reason */}
         <div className="mt-6">
-          <label className="mb-1.5 flex items-center gap-1.5 text-sm font-semibold text-slate-700">
-            <AlertTriangle className="size-4 text-rose-500" />
-            Alasan Penolakan
-          </label>
 
           <textarea
             value={reason}
@@ -171,8 +166,9 @@ export function RejectConfirmModal({
             className="w-full resize-none rounded-xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-rose-400 focus:ring-4 focus:ring-rose-100 disabled:cursor-not-allowed disabled:opacity-60"
           />
 
-          <p className="mt-1.5 text-xs text-slate-400">
-            Alasan penolakan wajib diisi.
+          <p className="mt-1 text-xs text-slate-400 flex gap-2 items-center">
+            <span className="text-rose-500">*</span>
+            Alasan penolakan boleh tidak diisi.
           </p>
         </div>
 
@@ -190,7 +186,7 @@ export function RejectConfirmModal({
           <button
             type="button"
             onClick={handleConfirm}
-            disabled={isLoading || !reason.trim()}
+            disabled={isLoading}
             className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? (

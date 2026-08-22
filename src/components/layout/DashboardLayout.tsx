@@ -9,7 +9,7 @@ import {
 import { NavLink } from "react-router-dom"; // 1. Ubah Link jadi NavLink
 import { backgroundContainer } from "../ui/styles";
 import { useLogout } from "../../features/auth/hooks/useLogout";
-import DashboardLoading from "./Loading";
+import DashboardLoading from "../ui/Loading";
 import PageError from "./PageError";
 import { useSession } from "../../features/auth/hooks/useSession";
 

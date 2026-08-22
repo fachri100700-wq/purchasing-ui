@@ -10,7 +10,7 @@ import {
   sourcingBadge,
 } from "../../../helpers/sppMapper";
 import { useGetSppDetail } from "../../../features/user/hooks/useGetSppDetail";
-import DashboardLoading from "../../../components/layout/Loading";
+import DashboardLoading from "../../../components/ui/Loading";
 import PageError from "../../../components/layout/PageError";
 import { useParams } from "react-router-dom";
 import { getSppStages } from "../../../helpers/getSppStages";

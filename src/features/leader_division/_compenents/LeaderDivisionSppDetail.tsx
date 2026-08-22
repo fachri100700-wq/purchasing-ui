@@ -10,7 +10,7 @@ import {
   sourcingBadge,
 } from "../../../helpers/sppMapper";
 import { useGetSppDetail } from "../../user/hooks/useGetSppDetail";
-import DashboardLoading from "../../../components/layout/Loading";
+import DashboardLoading from "../../../components/ui/Loading";
 import PageError from "../../../components/layout/PageError";
 import { useParams } from "react-router-dom";
 import { getSppStages } from "../../../helpers/getSppStages";
@@ -21,7 +21,11 @@ import { handlePrint } from "../../../helpers/handlePrint";
 import { useApproveLeaderDivision } from "../hooks/useApproveLeaderDivision";
 import { useRejectLeaderDivision } from "../hooks/useRejectLeaderDivision";
 import { useState } from "react";
-import { ApproveConfirmModal, RejectConfirmModal } from "../../../components/ui/ConfirmModal";
+import {
+  ApproveConfirmModal,
+  RejectConfirmModal,
+} from "../../../components/ui/ConfirmModal";
+import RejectionReason from "../../../components/layout/RejectionReason";
 
 const vendorQuotes = [
   {
@@ -56,7 +60,7 @@ export default function LeaderDivisionSppDetail() {
   const { data, isLoading, isError } = useGetSppDetail(id as string);
 
   const { isLoading: isApproving, handleApprove } = useApproveLeaderDivision();
-  const {register, handleSubmit, errors, isRejecting} = useRejectLeaderDivision()
+  const { isRejecting, handleReject } = useRejectLeaderDivision();
 
   if (isLoading || !data) {
     return <DashboardLoading />;
@@ -74,6 +78,10 @@ export default function LeaderDivisionSppDetail() {
   const progres = getStepInfo(data?.status);
 
   const stages = getSppStages(data);
+
+  const rejectedApproval = data.approvals
+    ?.filter((approval) => approval.approvalStatus === "rejected")
+    .at(-1);
 
   return (
     <DashboardLayout>
@@ -110,6 +118,10 @@ export default function LeaderDivisionSppDetail() {
             data={data}
           />
 
+          {rejectedApproval?.rejectionReason && (
+            <RejectionReason reason={rejectedApproval.rejectionReason} />
+          )}
+
           {/* PERBANDINGAN HARGA VENDOR */}
           <TableComparisonPaper comparisonPaper={vendorQuotes} />
         </div>
@@ -127,7 +139,11 @@ export default function LeaderDivisionSppDetail() {
                 label="Setujui"
                 onClick={() => setIsApproveModalOpen(true)}
               />
-              <Button variant="danger" label="Tolak" onClick={() => setIsRejectModalOpen(true)}/>
+              <Button
+                variant="danger"
+                label="Tolak"
+                onClick={() => setIsRejectModalOpen(true)}
+              />
               <Button
                 variant="secondary"
                 icon={<Printer className="size-4" />}
@@ -148,7 +164,9 @@ export default function LeaderDivisionSppDetail() {
 
       {isRejectModalOpen === true && (
         <RejectConfirmModal
-        isLoading={isRejecting}
+          isLoading={isRejecting}
+          onClose={() => setIsRejectModalOpen(false)}
+          onConfirm={(reason) => handleReject(id as string, reason)}
         />
       )}
     </DashboardLayout>
