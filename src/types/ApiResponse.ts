@@ -45,7 +45,7 @@ export type BudgetComplianceStatus =
   | "budget_exceeded"
   | "unbudgeted";
 
-export type ApprovalStatus = "approve" | "reject" | "pending";
+export type ApprovalStatus = "approved" | "reject" | "pending";
 
 export interface SppApproval {
   id: string;
